@@ -1,0 +1,43 @@
+{
+  "name": "hk-currency-bot",
+  "version": "1.0.0",
+  "description": "Monitor Hong Kong currency exchange rates with Telegram notification.",
+  "main": "index.js",
+  "dependencies": {
+    "bluebird": "^3.3.5",
+    "body-parser": "^1.15.0",
+    "cheerio": "^0.20.0",
+    "express": "^4.13.4",
+    "lodash": "^4.11.1",
+    "moment": "^2.12.0",
+    "pg": "^4.5.3",
+    "pg-hstore": "^2.3.2",
+    "request-promise": "^2.0.1",
+    "sequelize": "^3.21.0",
+    "teabot": "^2.1.1",
+    "teabot-botan": "^1.0.1"
+  },
+  "optionalDependencies": {
+    "pg-native": "^1.10.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inDream/hk-currency-bot.git"
+  },
+  "keywords": [
+    "hk",
+    "currency",
+    "telegram",
+    "bot"
+  ],
+  "author": "inDream",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inDream/hk-currency-bot/issues"
+  },
+  "homepage": "https://github.com/inDream/hk-currency-bot#readme"
+}
