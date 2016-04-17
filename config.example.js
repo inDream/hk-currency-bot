@@ -16,6 +16,7 @@ module.exports = {
   availCurrencies: availCurrencies,
   botname: '',
   pg: pgUrl,
+  pythonPath: '',
   webhook: {
     port: 0,
     path: '',
