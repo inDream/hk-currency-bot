@@ -29,6 +29,7 @@ function initApp(main, notifier) {
 
   /**
   help - Show commands description
+  bank - Show available banks
   currency - Show available currencies
   list - List currencies price
   track - Track currency price
@@ -40,12 +41,16 @@ function initApp(main, notifier) {
     .defineCommand('/start', function (dialog) {
       dialog.sendMessage('Hello, This is Hong Kong Currency Bot.');
     })
+    .defineCommand('/bank', function (dialog) {
+      dialog.sendMessage(main.banksIdMsg);
+    })
     .defineCommand('/currency', function (dialog) {
       dialog.sendMessage('Available currencies code: ' + 
         config.availCurrencies.join(' '));
     })
     .defineCommand('/help', function (dialog) {
-      dialog.sendMessage('/list [currency code] / all\n' + 
+      dialog.sendMessage('/list [currency code / "all"] [bank id]\n' + 
+        '(Default list best price among all banks) \n' +
         '/track or /untrack [currency code]\n' +
         '/interval [15 / 60 / 240 / 1440] (minutes)');
     })
