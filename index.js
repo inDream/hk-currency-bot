@@ -7,6 +7,7 @@ const Main = require('./lib/main');
 
 const db = new DB(config.pg);
 const TeaBot = require('teabot')(config.token.telegram, config.botname);
+const botan = require('teabot-botan');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -20,7 +21,7 @@ db.init()
 function initApp(main, notifier) {
   const app = express();
   app.use(bodyParser.json());
-  TeaBot.use('analytics', require('teabot-botan')(config.token.botan));
+  TeaBot.use('analytics', botan(config.token.botan, {allowQuery: true}));
   TeaBot.setWebhook(config.webhook.url);
 
   TeaBot.onError(function (e) {
@@ -49,7 +50,8 @@ function initApp(main, notifier) {
         config.availCurrencies.join(' '));
     })
     .defineCommand('/help', function (dialog) {
-      dialog.sendMessage('/list [currency code / "all"] [bank id]\n' + 
+      dialog.sendMessage('/list [currency code / "all"] [bank id / "best"] ' +
+        '[1 = 1/code (reverse)]\n e.g. /list all 1 1 \n'+
         '(Default list best price among all banks) \n' +
         '/track or /untrack [currency code]\n' +
         '/interval [15 / 60 / 240 / 1440] (minutes)');
@@ -65,6 +67,21 @@ function initApp(main, notifier) {
     })
     .defineCommand('/interval', function (dialog) {
       dialog.sendMessage(notifier.interval(message.getArgument()));
+    });
+
+  TeaBot
+    .inlineQuery(function(query) {
+      let qtext = query.query.query;
+      if (qtext) {
+        let ans = main.inlineAnswer(qtext);
+        if (ans && ans.length) {
+          query.addArticles(ans).answer();
+        } else {
+          query.answer();
+        }
+      } else {
+        query.answer();
+      }
     });
 
   app.post(config.webhook.path, function (req, res) {
