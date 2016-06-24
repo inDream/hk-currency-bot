@@ -57,16 +57,28 @@ function initApp(main, notifier) {
         '/interval [15 / 60 / 240 / 1440] (minutes)');
     })
     .defineCommand('/list', function (dialog, message) {
-      dialog.sendMessage(main.listCurrency(message.getArgument()));
+      let args = message.getArgument();
+      if (args) {
+        dialog.sendMessage(main.listCurrency(args));
+      }
     })
     .defineCommand('/track', function (dialog, message) {
-      dialog.sendMessage(notifier.track(message.getArgument()));
+      let args = message.getArgument();
+      if (args) {
+        dialog.sendMessage(notifier.track(args));
+      }
     })
     .defineCommand('/untrack', function (dialog, message) {
-      dialog.sendMessage(notifier.untrack(message.getArgument()));
+      let args = message.getArgument();
+      if (args) {
+        dialog.sendMessage(notifier.untrack(args));
+      }
     })
     .defineCommand('/interval', function (dialog) {
-      dialog.sendMessage(notifier.interval(message.getArgument()));
+      let args = message.getArgument();
+      if (args) {
+        dialog.sendMessage(notifier.interval(args));
+      }
     });
 
   TeaBot
