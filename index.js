@@ -4,6 +4,7 @@ const config = require('./config');
 const DB = require('./models');
 const Notifier = require('./lib/notifier');
 const Main = require('./lib/main');
+const Stat = require('./lib/stat');
 
 const db = new DB(config.pg);
 const TeaBot = require('teabot')(config.token.telegram, config.botname);
@@ -15,10 +16,11 @@ db.init()
   .then(function(ds) {
     let main = new Main(ds);
     let notifier = new Notifier(main, ds);
-    initApp(main, notifier);
+    let stat = new Stat(main, ds);
+    initApp(main, notifier, stat);
   });
 
-function initApp(main, notifier) {
+function initApp(main, notifier, stat) {
   const app = express();
   app.use(bodyParser.json());
   TeaBot.use('analytics', botan(config.token.botan, {allowQuery: true}));
@@ -59,7 +61,11 @@ function initApp(main, notifier) {
     .defineCommand('/list', function (dialog, message) {
       let args = message.getArgument();
       if (args) {
-        dialog.sendMessage(main.listCurrency(args));
+        let ans = main.listCurrency(args);
+        if (ans) {
+          dialog.sendMessage(ans);
+          stat.inc(args);
+        }
       }
     })
     .defineCommand('/track', function (dialog, message) {
@@ -88,6 +94,7 @@ function initApp(main, notifier) {
         let ans = main.inlineAnswer(qtext);
         if (ans && ans.length) {
           query.addArticles(ans).answer();
+          stat.inc(qtext);
         } else {
           query.answer();
         }
