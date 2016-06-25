@@ -92,7 +92,12 @@ function initApp(main, notifier, stat) {
   TeaBot
     .inlineQuery(function(query) {
       let qtext = query.query.query;
-      if (qtext) {
+      let qdata = query.query.data;
+      if (qdata) {
+        let ans = main.inlineAnswer(qdata, true).message_text;
+        query.editMessageText(ans);
+        stat.inc(qdata);
+      } else if (qtext) {
         let ans = main.inlineAnswer(qtext);
         if (ans && ans.length) {
           query.addArticles(ans).answer();
@@ -103,6 +108,9 @@ function initApp(main, notifier, stat) {
       } else {
         stat.inlineRecent(query);
       }
+    })
+    .inlineQueryChosen(data => {
+      stat.inc(data.chosen_inline_result.result_id);
     });
 
   app.post(config.webhook.path, function (req, res) {

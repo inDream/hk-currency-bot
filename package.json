@@ -15,7 +15,7 @@
     "pg-hstore": "^2.3.2",
     "request-promise": "^3.0.0",
     "sequelize": "^3.23.4",
-    "teabot": "^2.1.1",
+    "teabot": "git+https://git@github.com/inDream/teabot.git",
     "teabot-botan": "^1.0.1"
   },
   "optionalDependencies": {
