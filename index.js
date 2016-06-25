@@ -66,6 +66,8 @@ function initApp(main, notifier, stat) {
           dialog.sendMessage(ans);
           stat.inc(args);
         }
+      } else {
+        stat.dialogRecent(dialog);
       }
     })
     .defineCommand('/track', function (dialog, message) {
@@ -96,10 +98,10 @@ function initApp(main, notifier, stat) {
           query.addArticles(ans).answer();
           stat.inc(qtext);
         } else {
-          query.answer();
+          stat.inlineRecent(query);
         }
       } else {
-        query.answer();
+        stat.inlineRecent(query);
       }
     });
 
