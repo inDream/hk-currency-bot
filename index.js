@@ -94,9 +94,14 @@ function initApp(main, notifier, stat) {
       let qtext = query.query.query;
       let qdata = query.query.data;
       if (qdata) {
-        let ans = main.inlineAnswer(qdata, true).message_text;
-        query.editMessageText(ans);
-        stat.inc(qdata);
+        if (qdata.indexOf('Others') === -1) {
+          let ans = main.inlineAnswer(qdata, true).message_text;
+          query.editMessageText(ans);
+          stat.inc(qdata);
+        } else {
+          let reverse = parseInt(qdata.slice(0, -1));
+          query.editMessageReplyMarkup(main.inlineOthers(reverse));
+        }
       } else if (qtext) {
         let ans = main.inlineAnswer(qtext);
         if (ans && ans.length) {
