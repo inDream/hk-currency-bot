@@ -58,6 +58,9 @@ function initApp(main, notifier, stat) {
         '/track or /untrack [currency code]\n' +
         '/interval [15 / 60 / 240 / 1440] (minutes)');
     })
+    .defineCommand('/rate', function (dialog, message) {
+      dialog.sendMessage('Select bank', main.inlineBanks());
+    })
     .defineCommand('/list', function (dialog, message) {
       let args = message.getArgument();
       if (args) {
@@ -94,13 +97,16 @@ function initApp(main, notifier, stat) {
       let qtext = query.query.query;
       let qdata = query.query.data;
       if (qdata) {
-        if (qdata.indexOf('Others') === -1) {
+        if (qdata.indexOf('Bank') === 0) {
+          let bank = parseInt(qdata.slice(4));
+          query.editMessageReplyMarkup(main.inlineOthers(0, bank));
+        } else if (qdata.indexOf('Others') === 0) {
+          let reverse = parseInt(qdata.slice(0, -1));
+          query.editMessageReplyMarkup(main.inlineOthers(reverse, 0));
+        } else {
           let ans = main.inlineAnswer(qdata, true).message_text;
           query.editMessageText(ans);
           stat.inc(qdata);
-        } else {
-          let reverse = parseInt(qdata.slice(0, -1));
-          query.editMessageReplyMarkup(main.inlineOthers(reverse));
         }
       } else if (qtext) {
         let ans = main.inlineAnswer(qtext);
